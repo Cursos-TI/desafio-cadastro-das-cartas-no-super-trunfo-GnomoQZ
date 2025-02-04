@@ -26,7 +26,7 @@ int main() {
     } carta_A;
 
     // Criando um array para 4 cartas fora do switch para uso global no menu
-    carta_A ficha[4];
+    carta_A ficha[8];
 
     do {
         // Exibe o menu principal

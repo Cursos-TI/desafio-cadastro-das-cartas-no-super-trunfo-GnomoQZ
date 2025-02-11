@@ -24,6 +24,35 @@ typedef struct {
     float super_poder; // Soma das propriedades (ajustada para considerar a densidade invertida)
 } Carta;
 
+void cadastrar_cartas(Carta ficha[], int *total_cartas) {
+    printf("\n==== Cadastro das Cartas ====\n");
+    printf("Quantas cartas deseja cadastrar (máx 8)? ");
+    scanf("%d", total_cartas);
+    if (*total_cartas > 8) *total_cartas = 8;
+
+    for (int i = 0; i < *total_cartas; i++) {
+        printf("\nDigite o código da carta: ");
+        scanf("%s", ficha[i].codigo_carta);
+        printf("Digite o nome do estado: ");
+        scanf("%s", ficha[i].estado);
+        printf("Digite o nome da cidade: ");
+        scanf("%s", ficha[i].nome_cidade);
+        printf("Digite a população: ");
+        scanf("%d", &ficha[i].populacao);
+        printf("Digite o número de pontos turísticos: ");
+        scanf("%d", &ficha[i].ponto_turistico);
+        printf("Digite o PIB: ");
+        scanf("%d", &ficha[i].pib);
+        printf("Digite a área da cidade: ");
+        scanf("%f", &ficha[i].area);
+
+        ficha[i].densidade = dividir(ficha[i].populacao, ficha[i].area);
+        ficha[i].pib_per_capita = dividir(ficha[i].pib, ficha[i].populacao);
+        ficha[i].super_poder = ficha[i].populacao + ficha[i].area + ficha[i].pib + ficha[i].pib_per_capita + dividir(1, ficha[i].densidade) + ficha[i].ponto_turistico;
+    }
+    printf("\nCartas cadastradas com sucesso!\n");
+}
+
 int main() {
     int opcao;
     int cartas_cadastradas = 0;
@@ -43,8 +72,15 @@ int main() {
         switch (opcao) {
             case 1:
                 if (!cartas_cadastradas) {
-                    printf("\nNenhuma carta cadastrada! Cadastre primeiro.\n");
-                    break;
+                    printf("\nNenhuma carta cadastrada! Deseja cadastrar antes de jogar? (1-Sim, 2-Não): ");
+                    int escolha;
+                    scanf("%d", &escolha);
+                    if (escolha == 1) {
+                        cadastrar_cartas(ficha, &total_cartas);
+                        cartas_cadastradas = 1;
+                    } else {
+                        break;
+                    }
                 }
 
                 char carta_1[6], carta_2[6];
@@ -79,36 +115,11 @@ int main() {
                 }
                 break;
 
-            case 2: {
-                printf("\n==== Cadastro das Cartas ====\n");
-                printf("Quantas cartas deseja cadastrar (máx 32)? ");
-                scanf("%d", &total_cartas);
-                if (total_cartas > 32) total_cartas = 32;
-
-                for (int i = 0; i < total_cartas; i++) {
-                    printf("\nDigite o código da carta: ");
-                    scanf("%s", ficha[i].codigo_carta);
-                    printf("Digite o nome do estado: ");
-                    scanf("%s", ficha[i].estado);
-                    printf("Digite o nome da cidade: ");
-                    scanf("%s", ficha[i].nome_cidade);
-                    printf("Digite a população: ");
-                    scanf("%d", &ficha[i].populacao);
-                    printf("Digite o número de pontos turísticos: ");
-                    scanf("%d", &ficha[i].ponto_turistico);
-                    printf("Digite o PIB: ");
-                    scanf("%d", &ficha[i].pib);
-                    printf("Digite a área da cidade: ");
-                    scanf("%f", &ficha[i].area);
-
-                    ficha[i].densidade = dividir(ficha[i].populacao, ficha[i].area);
-                    ficha[i].pib_per_capita = dividir(ficha[i].pib, ficha[i].populacao);
-                    ficha[i].super_poder = ficha[i].populacao + ficha[i].area + ficha[i].pib + ficha[i].pib_per_capita + dividir(1, ficha[i].densidade) + ficha[i].ponto_turistico;
-                }
+            case 2:
+                cadastrar_cartas(ficha, &total_cartas);
                 cartas_cadastradas = 1;
-                printf("\nCartas cadastradas com sucesso!\n");
                 break;
-            }
+
             case 3:
                 if (!cartas_cadastradas) {
                     printf("\nNenhuma carta cadastrada!\n");
